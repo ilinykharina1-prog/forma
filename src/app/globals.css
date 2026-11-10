@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f4f2ed;
+  --color-ink: #20211f;
+  --color-night: #191a18;
+  --color-accent: #9a806b;
+  --color-muted: #85837d;
+  --color-line: rgb(32 33 31 / 0.14);
+  --color-line-inv: rgb(255 255 255 / 0.16);
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --ease-arch: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    scroll-padding-top: 64px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 300;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 48px;
+    }
+  }
+  .section {
+    padding-block: 96px;
+  }
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 120px;
+    }
+  }
+  .display {
+    font-size: clamp(2.5rem, 6.2vw, 6.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 300;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .lead {
+    font-size: clamp(1.125rem, 1.45vw, 1.375rem);
+    line-height: 1.5;
+  }
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  /* Ссылка с линией, которая прочерчивается при наведении */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.45s var(--ease-arch);
+  }
+  .link-line:hover {
+    background-size: 100% 1px;
+  }
+
+  .field {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-line);
+    border-radius: 0;
+    padding: 8px 0 16px;
+    font-size: 1.125rem;
+    transition: border-color 0.3s;
+  }
+  .field:hover {
+    border-color: var(--color-muted);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+  }
+  .field[aria-invalid="true"] {
+    border-color: #a4452f;
+  }
+}
+
+/* Тема текста поверх сцены: тёмная днём, светлая на закате */
+.hero-stage {
+  --hero-fg: var(--color-ink);
+  --hero-soft: rgb(32 33 31 / 0.72);
+  --hero-line: rgb(32 33 31 / 0.22);
+  color: var(--hero-fg);
+  transition: color 0.8s;
+}
+.hero-stage[data-dusk="true"] {
+  --hero-fg: #fff;
+  --hero-soft: rgb(255 255 255 / 0.8);
+  --hero-line: rgb(255 255 255 / 0.3);
+}
+
+/* Дымка под текстом этапа: читаемость без плашек, сцена остаётся открытой */
+.hero-veil {
+  background: radial-gradient(ellipse 58% 66% at 10% 18%, rgb(244 242 237 / 0.94), rgb(244 242 237 / 0.82) 48%, rgb(244 242 237 / 0) 100%);
+  transition: opacity 0.7s, background 0.8s;
+}
+.hero-stage[data-dusk="true"] .hero-veil {
+  background: radial-gradient(ellipse 60% 62% at 12% 18%, rgb(25 26 24 / 0.5), rgb(25 26 24 / 0) 100%);
+}
+@media (max-width: 767px) {
+  .hero-veil {
+    background: linear-gradient(rgb(244 242 237 / 0.92) 30%, rgb(244 242 237 / 0) 56%);
+  }
+  .hero-stage[data-dusk="true"] .hero-veil {
+    background: linear-gradient(rgb(25 26 24 / 0.5) 30%, rgb(25 26 24 / 0) 56%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
